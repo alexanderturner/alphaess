@@ -50,15 +50,13 @@ type BatteryStats struct {
 }
 
 func main() {
+	done := make(chan bool)
 	c := influxDBClient()
-
 	stats := new(RTStats)
 	s := new(AlphaSession)
 
 	go s.apiPoller(c, stats)
-
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8080", nil)
+	<-done
 
 }
 
@@ -162,8 +160,8 @@ func (s *AlphaSession) apiPoller(client client.Client, stats *RTStats) error {
 			log.Println("Session not valid, creating new session")
 			s.getAuthToken()
 		}
-		go s.getRTStats(stats)
-		go createMetrics(client, stats)
+		s.getRTStats(stats)
+		createMetrics(client, stats)
 		// fmt.Printf("Battery power draw: %f watts\n", stats.Data.BatteryDraw)
 
 	}
