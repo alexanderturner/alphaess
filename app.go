@@ -19,7 +19,8 @@ func (a *App) apiPoller() {
 		if s.Status {
 			a.createMetrics(s)
 		} else {
-			log.Println("Error acquiring stats, will continue trying")
+			log.Println("Error acquiring stats, will refresh token")
+      a.Alpha.getAuthToken()
 		}
 
 		time.Sleep(3 * time.Second)
