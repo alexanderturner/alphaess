@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -84,15 +85,16 @@ func (s *AlphaSession) getAuthToken() error {
 		return err
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("X-Requested-With", "XMLHttpRequest")
 
 	resp, err := client.Do(req)
 	defer resp.Body.Close()
 
-	// //debugging
-	// //fmt.Println(resp.Body)
-	// bodyBytes, _ := ioutil.ReadAll(resp.Body)
-	// bodyString := string(bodyBytes)
-	// fmt.Println(bodyString)
+	//debugging
+	//fmt.Println(resp.Body)
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	bodyString := string(bodyBytes)
+	fmt.Println(bodyString)
 
 	for _, cookie := range resp.Cookies() {
 		switch cookie.Name {
