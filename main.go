@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -92,9 +91,9 @@ func (s *AlphaSession) getAuthToken() error {
 
 	//debugging
 	//fmt.Println(resp.Body)
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-	bodyString := string(bodyBytes)
-	fmt.Println(bodyString)
+	// bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	// bodyString := string(bodyBytes)
+	// fmt.Println(bodyString)
 
 	for _, cookie := range resp.Cookies() {
 		switch cookie.Name {
@@ -164,13 +163,8 @@ func (s *AlphaSession) apiPoller(client client.Client, stats *RTStats) error {
 		}
 		s.getRTStats(stats)
 		createMetrics(client, stats)
-		// fmt.Printf("Battery power draw: %f watts\n", stats.Data.BatteryDraw)
 
 	}
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
 }
 
 func createMetrics(c client.Client, s *RTStats) {
@@ -199,7 +193,6 @@ func createMetrics(c client.Client, s *RTStats) {
 	dbStats.Solar = s.Data.Ppv1 + s.Data.Ppv2 + s.Data.PmeterDc
 	dbStats.Load = s.Data.Pbat + dbStats.Solar + gridLoad
 
-	// eventTime := time.Now().Add(time.Second * -20)
 	eventTime := time.Now()
 
 	tags := map[string]string{}
@@ -218,7 +211,6 @@ func createMetrics(c client.Client, s *RTStats) {
 		"batt_stat",
 		tags,
 		fields,
-		// eventTime.Add(time.Second*10),
 		eventTime,
 	)
 	if err != nil {
