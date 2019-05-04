@@ -8,7 +8,7 @@ import (
 	client "github.com/influxdata/influxdb1-client/v2"
 )
 
-func influxDBClient() client.Client {
+func InfluxDBClient() client.Client {
 	c, err := client.NewHTTPClient(client.HTTPConfig{
 		Addr:     os.Getenv("DBURL"),
 		Username: os.Getenv("DBUSER"),
@@ -20,7 +20,7 @@ func influxDBClient() client.Client {
 	return c
 }
 
-func (a *App) createMetrics(s RTStats) {
+func (a *App) CreateMetrics(s RTStats) {
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
 		Database:  os.Getenv("DBNAME"),
 		Precision: "s",

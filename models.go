@@ -12,8 +12,8 @@ type App struct {
 }
 
 type AlphaSession struct {
-	sessionID *http.Cookie
-	gAuth     *http.Cookie
+	SessionID *http.Cookie
+	GAuth     *http.Cookie
 	Expiry    *http.Cookie
 }
 

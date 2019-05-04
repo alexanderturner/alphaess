@@ -5,22 +5,22 @@ import (
 	"time"
 )
 
-func (a *App) apiPoller() {
+func (a *App) ApiPoller() {
 	for {
-		if a.Alpha.checkSession() {
+		if a.Alpha.CheckSession() {
 			log.Println("Session not valid, creating new session")
-			a.Alpha.getAuthToken()
+			a.Alpha.GetAuthToken()
 		}
 
-		s, err := a.Alpha.getRTStats()
+		s, err := a.Alpha.GetRTStats()
 		if err != nil {
 			log.Println(err)
 		}
 		if s.Status {
-			a.createMetrics(s)
+			a.CreateMetrics(s)
 		} else {
 			log.Println("Error acquiring stats, will refresh token")
-      a.Alpha.getAuthToken()
+			a.Alpha.GetAuthToken()
 		}
 
 		time.Sleep(3 * time.Second)
