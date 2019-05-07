@@ -1,39 +1,9 @@
 version: "2"
 services:
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    restart: always
-    ports:
-      - 3000:3000
-    networks:
-      - monitoring
-    labels:
-      - traefik.backend=graphana
-      - traefik.frontend.rule=Host:grafana.alexturner.co
-      - traefik.docker.network=monitoring
-      - traefik.port=80
-    volumes:
-      - grafana-volume:/var/lib/grafana
-  influxdb:
-    image: influxdb
-    environment:
-      INFLUXDB_DB: "power"
-      INFLUXDB_ADMIN_USER: "admin"
-      INFLUXDB_ADMIN_PASSWORD: "wombats"
-      INFLUXDB_HTTP_AUTH_ENABLED: "true"
-    container_name: influxdb
-    restart: always
-    ports:
-      - 8086:8086
-    networks:
-      - monitoring
-    volumes:
-      - influxdb-volume:/var/lib/influxdb
   alphaess:
-    image: alexturner/alphaess
+    image: alphaess
     environment:
-      DBURL: "http://influxdb:8086"
+      DBURL: "http://alexturner.co:8086"
       DBUSER: "admin"
       DBPASS: "wombats"
       DBNAME: "test"
@@ -44,25 +14,5 @@ services:
     restart: always
     networks:
       - monitoring
-  traefik:
-   image: traefik:1.7.2-alpine
-   volumes:
-     - /var/run/docker.sock:/var/run/docker.sock
-     - /root/traefik.toml:/traefik.toml
-     - /root/acme.json:/acme.json
-   ports:
-     - 80:80
-     - 443:443
-   networks:
-     - monitoring
-   labels:
-     - traefik.frontend.rule=Host:monitor.alexturner.co
-     - traefik.port=8080
-   container_name: traefik
 networks:
   monitoring:
-volumes:
-  grafana-volume:
-    external: true
-  influxdb-volume:
-    external: true
