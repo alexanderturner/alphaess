@@ -84,7 +84,7 @@ func (s *AlphaSession) GetRTStats() (r RTStats, err error) {
 	}
 
 	defer resp.Body.Close()
-	//debugging
+	//debugging test
 
 	fmt.Println()
 
